@@ -197,12 +197,27 @@ ${text}
       timestamp: new Date().toISOString(),
     });
   } catch (err: any) {
-    console.error('Gemini spell check error, falling back to offline lexicon:', err);
+    const errorMsg = String(err?.message || err || '');
+    const isBillingError =
+      err?.status === 403 ||
+      errorMsg.includes('PERMISSION_DENIED') ||
+      errorMsg.includes('free tier is not available') ||
+      errorMsg.includes('billing');
+
+    if (isBillingError) {
+      console.log('Notice: Cloud project requires billing for Gemini API. Falling back to built-in Offline Lexicon Engine.');
+    } else {
+      console.log('Notice: Gemini API fallback triggered:', errorMsg.slice(0, 100));
+    }
+
     // Fallback gracefully to offline lexicon
     const fallbackResult = runOfflineLexiconSpellCheck(text, customWords);
     fallbackResult.documentName = docTitle;
     fallbackResult.benchmarkMs = Math.round((performance.now() - t0) * 100) / 100;
-    return res.json(fallbackResult);
+    return res.json({
+      ...fallbackResult,
+      apiNotice: isBillingError ? 'BILLING_REQUIRED' : 'NORMAL',
+    });
   }
 });
 

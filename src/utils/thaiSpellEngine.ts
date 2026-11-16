@@ -35,6 +35,7 @@ export interface CheckResult {
   benchmarkMs: number;
   engineUsed: 'gemini-ai' | 'offline-lexicon';
   timestamp: string;
+  apiNotice?: 'BILLING_REQUIRED' | 'API_KEY_INVALID' | 'RATE_LIMITED' | 'NORMAL';
 }
 
 export interface AuditLogEntry {

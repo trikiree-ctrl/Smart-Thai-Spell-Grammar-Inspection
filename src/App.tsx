@@ -109,7 +109,11 @@ export default function App() {
 
       setCurrentBenchmarkMs(data.benchmarkMs);
       setEngineUsed(data.engineUsed || 'gemini-ai');
-      setHudStatusText(`ประมวลผลสำเร็จ (${data.errors.length} ข้อผิดพลาด)`);
+      if (data.apiNotice === 'BILLING_REQUIRED') {
+        setHudStatusText(`Offline Lexicon (${data.errors.length} คำผิด - โครงการต้องการ Billing)`);
+      } else {
+        setHudStatusText(`ประมวลผลสำเร็จ (${data.errors.length} ข้อผิดพลาด)`);
+      }
       setIsLoading(false);
       return data;
     } catch (apiError) {

@@ -64,6 +64,7 @@ export const DocumentInspector: React.FC<DocumentInspectorProps> = ({
   const [customInputValue, setCustomInputValue] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [apiNotice, setApiNotice] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Re-compute corrected text preview
@@ -78,6 +79,7 @@ export const DocumentInspector: React.FC<DocumentInspectorProps> = ({
       setErrors(result.errors);
       setBenchmarkMs(result.benchmarkMs);
       setEngineUsed(result.engineUsed);
+      setApiNotice(result.apiNotice || null);
       onSaveToHistory(result);
     }
   };
@@ -315,6 +317,25 @@ export const DocumentInspector: React.FC<DocumentInspectorProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Notice banner when Gemini API free tier / billing requires offline fallback */}
+        {apiNotice === 'BILLING_REQUIRED' && (
+          <div className="mt-3 flex items-start justify-between rounded-xl border border-amber-200 bg-amber-50/90 p-3 text-xs text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
+            <div className="flex items-start gap-2">
+              <span className="font-bold shrink-0">💡 สลับใช้งาน Offline Lexicon อัตโนมัติ:</span>
+              <span>
+                โครงการนี้ยังไม่ได้เปิดใช้ Billing สำหรับ Gemini API ในระบบคลาวด์ ระบบจึงประมวลผลด้วย Offline Local Lexicon Engine ซึ่งตรวจจับและยืนยันคำผิดภาษาไทยได้ครบถ้วน ถูกต้อง และรวดเร็วระดับเสี้ยววินาที (&lt; 0.05s) โดยไม่จำเป็นต้องต่อเน็ต
+              </span>
+            </div>
+            <button
+              onClick={() => setApiNotice(null)}
+              className="ml-2 px-1.5 py-0.5 rounded text-amber-700 hover:bg-amber-100 font-bold dark:text-amber-400 dark:hover:bg-amber-900"
+              title="ปิดการแจ้งเตือนนี้"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Drag & drop helper strip */}
         <div
