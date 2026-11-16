@@ -1,0 +1,6 @@
+{
+  "name": "ThaiDoc Inspector - ระบบตรวจจับคำผิด AI & ตรวจสอบเอกสาร",
+  "description": "ระบบตรวจจับและยืนยันคำผิดในเอกสาร พร้อมแก้ไขอัตโนมัติด้วย AI ภาษาไทย รองรับ .docx และ .pdf ทำงานแบบ Online/Offline พร้อมประวัติการแก้ไขและรายงานรายสัปดาห์",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
